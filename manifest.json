@@ -1,0 +1,10 @@
+{
+    "name": "ring",
+    "vendor": "ysdragon",
+    "app_name_multilang": ["Ring", "Ring", "Ring"],
+    "description": "Ring Embedded in MRE",
+    "version": 1,
+    "required_ram": 512,
+    "imsi": "",
+    "run_in_background": 0
+}
