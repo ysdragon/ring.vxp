@@ -50,7 +50,7 @@ pkg install -y arm-none-eabi-gcc
 <details>
 <summary>Windows</summary>
 
-1. Install GNU Make via [MinGW](http://mingw.org/)
+1. Install GNU Make via [MinGW](https://mingw-w64.org/)
 2. Install [ARM GNU Toolchain](https://developer.arm.com/downloads/-/gnu-rm)
 3. Add both to PATH
 </details>
