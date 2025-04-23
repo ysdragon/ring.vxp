@@ -48,4 +48,7 @@ extern Menu menu;
 void set_state(State new_state);
 void handle_sysevt(VMINT message, VMINT param);
 void handle_keyevt(VMINT event, VMINT keycode);
+
 static void draw_running_state(void);
+static void cleanup_ring_state(void);
+static VMBOOL execute_script(const char *script_path);
