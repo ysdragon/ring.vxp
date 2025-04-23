@@ -4,7 +4,6 @@ void ring_vm_mre_loadfunctions(RingState *pRingState)
 {
     RING_API_REGISTER("draw_text", ring_mre_draw_text);
     RING_API_REGISTER("flush_screen", ring_mre_flush_screen);
-    RING_API_REGISTER("sleep", ring_mre_sleep);
     RING_API_REGISTER("clear_screen", ring_mre_clear_screen);
     RING_API_REGISTER("draw_rect", ring_mre_draw_rect);
     RING_API_REGISTER("fill_rect", ring_mre_fill_rect);
@@ -15,11 +14,13 @@ void ring_vm_mre_loadfunctions(RingState *pRingState)
     RING_API_REGISTER("screen_width", ring_mre_screen_width);
     RING_API_REGISTER("screen_height", ring_mre_screen_height);
 
+    RING_API_REGISTER("sleep", ring_mre_sleep);
+    RING_API_REGISTER("memory_size", ring_mre_memory_size);
+
     RING_API_REGISTER("clock", ring_mre_clock);
     RING_API_REGISTER("clockspersecond", ring_mre_clockspersecond);
     RING_API_REGISTER("time", ring_mre_time);
     RING_API_REGISTER("date", ring_mre_date);
-    RING_API_REGISTER("memory_size", ring_mre_memory_size);
 }
 
 void ring_mre_draw_text(void *pPointer)
@@ -32,13 +33,13 @@ void ring_mre_draw_text(void *pPointer)
 
     if (RING_API_PARACOUNT != 3 && RING_API_PARACOUNT != 6)
     {
-        RING_API_ERROR("Usage: mre_draw_text(x, y, text_string) or mre_draw_text(x, y, text_string, r, g, b)");
+        RING_API_ERROR("Usage: draw_text(x, y, text_string) or draw_text(x, y, text_string, r, g, b)");
         return;
     }
 
     if (!RING_API_ISNUMBER(1) || !RING_API_ISNUMBER(2) || !RING_API_ISSTRING(3))
     {
-        RING_API_ERROR("Incorrect base parameter types for mre_draw_text(x, y, text_string, [r, g, b])");
+        RING_API_ERROR("Incorrect base parameter types for draw_text(x, y, text_string, [r, g, b])");
         return;
     }
 
@@ -51,7 +52,7 @@ void ring_mre_draw_text(void *pPointer)
     {
         if (!RING_API_ISNUMBER(4) || !RING_API_ISNUMBER(5) || !RING_API_ISNUMBER(6))
         {
-            RING_API_ERROR("Incorrect color parameter types for mre_draw_text(x, y, text_string, r, g, b)");
+            RING_API_ERROR("Incorrect color parameter types for draw_text(x, y, text_string, r, g, b)");
             return;
         }
         r = (VMUINT8)RING_API_GETNUMBER(4);
@@ -86,12 +87,12 @@ void ring_mre_clear_screen(void *pPointer)
 
     if (RING_API_PARACOUNT != 0)
     {
-        RING_API_ERROR("Usage: mre_clear_screen()");
+        RING_API_ERROR("Usage: clear_screen()");
         return;
     }
     if (layer_hdl[0] == -1)
     {
-        RING_API_ERROR("mre_clear_screen: Invalid layer handle.");
+        RING_API_ERROR("clear_screen: Invalid layer handle.");
         return;
     }
 
@@ -106,12 +107,12 @@ void ring_mre_set_color(void *pPointer)
     VMUINT8 r, g, b;
     if (RING_API_PARACOUNT != 3)
     {
-        RING_API_ERROR("Usage: mre_set_color(r, g, b)");
+        RING_API_ERROR("Usage: set_color(r, g, b)");
         return;
     }
     if (!RING_API_ISNUMBER(1) || !RING_API_ISNUMBER(2) || !RING_API_ISNUMBER(3))
     {
-        RING_API_ERROR("Incorrect parameter types for mre_set_color(r, g, b)");
+        RING_API_ERROR("Incorrect parameter types for set_color(r, g, b)");
         return;
     }
     r = (VMUINT8)RING_API_GETNUMBER(1);
@@ -129,17 +130,17 @@ void ring_mre_background_color(void *pPointer)
 
     if (RING_API_PARACOUNT != 3)
     {
-        RING_API_ERROR("Usage: mre_set_background_color(r, g, b)");
+        RING_API_ERROR("Usage: background_color(r, g, b)");
         return;
     }
     if (!RING_API_ISNUMBER(1) || !RING_API_ISNUMBER(2) || !RING_API_ISNUMBER(3))
     {
-        RING_API_ERROR("Incorrect parameter types for mre_set_background_color(r, g, b)");
+        RING_API_ERROR("Incorrect parameter types for set_background_color(r, g, b)");
         return;
     }
     if (layer_hdl[0] == -1)
     {
-        RING_API_ERROR("mre_set_background_color: Invalid layer handle.");
+        RING_API_ERROR("background_color: Invalid layer handle.");
         return;
     }
 
@@ -160,17 +161,17 @@ void ring_mre_draw_rect(void *pPointer)
     VMINT x, y, w, h;
     if (RING_API_PARACOUNT != 4)
     {
-        RING_API_ERROR("Usage: mre_draw_rect(x, y, width, height)");
+        RING_API_ERROR("Usage: draw_rect(x, y, width, height)");
         return;
     }
     if (!RING_API_ISNUMBER(1) || !RING_API_ISNUMBER(2) || !RING_API_ISNUMBER(3) || !RING_API_ISNUMBER(4))
     {
-        RING_API_ERROR("Incorrect parameter types for mre_draw_rect(x, y, width, height)");
+        RING_API_ERROR("Incorrect parameter types for draw_rect(x, y, width, height)");
         return;
     }
     if (layer_hdl[0] == -1)
     {
-        RING_API_ERROR("mre_draw_rect: Invalid layer handle.");
+        RING_API_ERROR("draw_rect: Invalid layer handle.");
         return;
     }
     x = (VMINT)RING_API_GETNUMBER(1);
@@ -186,17 +187,17 @@ void ring_mre_fill_rect(void *pPointer)
     VMINT x, y, w, h;
     if (RING_API_PARACOUNT != 4)
     {
-        RING_API_ERROR("Usage: mre_fill_rect(x, y, width, height)");
+        RING_API_ERROR("Usage: fill_rect(x, y, width, height)");
         return;
     }
     if (!RING_API_ISNUMBER(1) || !RING_API_ISNUMBER(2) || !RING_API_ISNUMBER(3) || !RING_API_ISNUMBER(4))
     {
-        RING_API_ERROR("Incorrect parameter types for mre_fill_rect(x, y, width, height)");
+        RING_API_ERROR("Incorrect parameter types for fill_rect(x, y, width, height)");
         return;
     }
     if (layer_hdl[0] == -1)
     {
-        RING_API_ERROR("mre_fill_rect: Invalid layer handle.");
+        RING_API_ERROR("fill_rect: Invalid layer handle.");
         return;
     }
     x = (VMINT)RING_API_GETNUMBER(1);
@@ -212,17 +213,17 @@ void ring_mre_draw_line(void *pPointer)
     VMINT x1, y1, x2, y2;
     if (RING_API_PARACOUNT != 4)
     {
-        RING_API_ERROR("Usage: mre_draw_line(x1, y1, x2, y2)");
+        RING_API_ERROR("Usage: draw_line(x1, y1, x2, y2)");
         return;
     }
     if (!RING_API_ISNUMBER(1) || !RING_API_ISNUMBER(2) || !RING_API_ISNUMBER(3) || !RING_API_ISNUMBER(4))
     {
-        RING_API_ERROR("Incorrect parameter types for mre_draw_line(x1, y1, x2, y2)");
+        RING_API_ERROR("Incorrect parameter types for draw_line(x1, y1, x2, y2)");
         return;
     }
     if (layer_hdl[0] == -1)
     {
-        RING_API_ERROR("mre_draw_line: Invalid layer handle.");
+        RING_API_ERROR("draw_line: Invalid layer handle.");
         return;
     }
     x1 = (VMINT)RING_API_GETNUMBER(1);
@@ -238,17 +239,17 @@ void ring_mre_draw_pixel(void *pPointer)
     VMINT x, y;
     if (RING_API_PARACOUNT != 2)
     {
-        RING_API_ERROR("Usage: mre_draw_pixel(x, y)");
+        RING_API_ERROR("Usage: draw_pixel(x, y)");
         return;
     }
     if (!RING_API_ISNUMBER(1) || !RING_API_ISNUMBER(2))
     {
-        RING_API_ERROR("Incorrect parameter types for mre_draw_pixel(x, y)");
+        RING_API_ERROR("Incorrect parameter types for draw_pixel(x, y)");
         return;
     }
     if (layer_hdl[0] == -1)
     {
-        RING_API_ERROR("mre_draw_pixel: Invalid layer handle.");
+        RING_API_ERROR("draw_pixel: Invalid layer handle.");
         return;
     }
     x = (VMINT)RING_API_GETNUMBER(1);
@@ -262,7 +263,7 @@ void ring_mre_screen_width(void *pPointer)
     VMINT screenWidth = vm_graphic_get_screen_width();
     if (RING_API_PARACOUNT != 0)
     {
-        RING_API_ERROR("Usage: mre_screen_width()");
+        RING_API_ERROR("Usage: screen_width()");
         return;
     }
     RING_API_RETNUMBER(screenWidth);
@@ -273,7 +274,7 @@ void ring_mre_screen_height(void *pPointer)
     VMINT screenHeight = vm_graphic_get_screen_height();
     if (RING_API_PARACOUNT != 0)
     {
-        RING_API_ERROR("Usage: mre_screen_height()");
+        RING_API_ERROR("Usage: screen_height()");
         return;
     }
     RING_API_RETNUMBER(screenHeight);
@@ -283,12 +284,12 @@ void ring_mre_flush_screen(void *pPointer)
 {
     if (RING_API_PARACOUNT != 0)
     {
-        RING_API_ERROR("Usage: mre_flush_screen()");
+        RING_API_ERROR("Usage: flush_screen()");
         return;
     }
     if (layer_hdl[0] == -1)
     {
-        RING_API_ERROR("mre_flush_screen: Invalid layer handle.");
+        RING_API_ERROR("flush_screen: Invalid layer handle.");
         return;
     }
 
@@ -302,12 +303,12 @@ void ring_mre_sleep(void *pPointer)
 
     if (RING_API_PARACOUNT != 1)
     {
-        RING_API_ERROR("Usage: mre_sleep(milliseconds)");
+        RING_API_ERROR("Usage: sleep(milliseconds)");
         return;
     }
     if (!RING_API_ISNUMBER(1))
     {
-        RING_API_ERROR("Incorrect parameter type for mre_sleep(number)");
+        RING_API_ERROR("Incorrect parameter type for sleep(number)");
         return;
     }
     duration_ms = (VMINT)RING_API_GETNUMBER(1);
@@ -329,7 +330,7 @@ void ring_mre_clock(void *pPointer)
 {
     if (RING_API_PARACOUNT != 0)
     {
-        RING_API_ERROR("Usage: mre_clock()");
+        RING_API_ERROR("Usage: clock()");
         return;
     }
     RING_API_RETNUMBER((double)vm_get_tick_count());
@@ -339,7 +340,7 @@ void ring_mre_clockspersecond(void *pPointer)
 {
     if (RING_API_PARACOUNT != 0)
     {
-        RING_API_ERROR("Usage: mre_clockspersecond()");
+        RING_API_ERROR("Usage: clockspersecond()");
         return;
     }
 
@@ -353,7 +354,7 @@ void ring_mre_time(void *pPointer)
 
     if (RING_API_PARACOUNT != 0)
     {
-        RING_API_ERROR("Usage: mre_time()");
+        RING_API_ERROR("Usage: time()");
         return;
     }
 
@@ -371,7 +372,7 @@ void ring_mre_date(void *pPointer)
 
     if (RING_API_PARACOUNT != 0)
     {
-        RING_API_ERROR("Usage: mre_date()");
+        RING_API_ERROR("Usage: date()");
         return;
     }
 
