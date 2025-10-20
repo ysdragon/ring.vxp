@@ -1,26 +1,25 @@
 #pragma once
 
-#include "vmsys.h"
-#include "vmio.h"
-#include "vmgraph.h"
 #include "vmchset.h"
-#include "vmstdlib.h"
-#include "vmtimer.h"
-#include "vmmm.h"
 #include "vm4res.h"
+#include "vmgraph.h"
+#include "vmio.h"
+#include "vmmm.h"
+#include "vmstdlib.h"
+#include "vmsys.h"
+#include "vmtimer.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "util.h"
+#include "editor.h"
 #include "ring.h"
 #include "stb_ds.h"
-#include "editor.h"
+#include "util.h"
 #include "menu.h"
 
-typedef enum State
-{
+typedef enum State {
 	ST_MENU,
 	ST_RUNNING,
 	ST_EDITOR,
@@ -37,7 +36,8 @@ typedef enum State
 #define MAIN_COLOR MRE_RGB(45, 84, 203)
 #define SEPARATOR_COLOR MRE_RGB(128, 128, 128)
 
-#define MRE_RGB(r, g, b) (VMUINT16)((((r) >> 3) << 11) | (((g) >> 2) << 5) | ((b) >> 3))
+#define MRE_RGB(r, g, b)                                                       \
+	(VMUINT16)((((r) >> 3) << 11) | (((g) >> 2) << 5) | ((b) >> 3))
 
 #define SCREEN_WIDTH vm_graphic_get_screen_width()
 #define SCREEN_HEIGHT vm_graphic_get_screen_height()

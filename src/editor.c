@@ -6,29 +6,25 @@ VMWCHAR title_name[100] = {0, 0};
 
 VMWCHAR *g_edit_buffer = NULL;
 
-void save_text(VMINT state, VMWSTR text)
-{
+void save_text(VMINT state, VMWSTR text) {
 
-	if (g_edit_buffer)
-	{
+	if (g_edit_buffer) {
 		vm_free(g_edit_buffer);
 		g_edit_buffer = NULL;
 	}
 
-	if (state == VM_INPUT_OK)
-	{
+	if (state == VM_INPUT_OK) {
 		VMINT len = wstrlen(text);
-		if (len > 0)
-		{
+		if (len > 0) {
 
 			VMCHAR *new_data = vm_malloc(len * 3 + 1);
-			if (new_data)
-			{
-				f_read = vm_file_open(file_pathw, MODE_CREATE_ALWAYS_WRITE, FALSE);
-				if (f_read >= 0)
-				{
+			if (new_data) {
+				f_read =
+					vm_file_open(file_pathw, MODE_CREATE_ALWAYS_WRITE, FALSE);
+				if (f_read >= 0) {
 					VMUINT nwrite;
-					vm_chset_convert(VM_CHSET_UCS2, VM_CHSET_UTF8, (VMCHAR *)text, new_data, len * 3 + 1);
+					vm_chset_convert(VM_CHSET_UCS2, VM_CHSET_UTF8,
+									 (VMCHAR *)text, new_data, len * 3 + 1);
 					vm_file_write(f_read, new_data, strlen(new_data), &nwrite);
 					vm_file_close(f_read);
 				}
@@ -39,8 +35,7 @@ void save_text(VMINT state, VMWSTR text)
 	set_state(ST_MENU);
 }
 
-void read_file_to_input(VMWSTR path)
-{
+void read_file_to_input(VMWSTR path) {
 	VMCHAR *text_data = NULL;
 	VMUINT nread, file_size;
 
@@ -48,15 +43,13 @@ void read_file_to_input(VMWSTR path)
 	if (f_read < 0)
 		return;
 
-	if (vm_file_getfilesize(f_read, &file_size) < 0)
-	{
+	if (vm_file_getfilesize(f_read, &file_size) < 0) {
 		vm_file_close(f_read);
 		return;
 	}
 
 	text_data = vm_malloc(file_size + 1);
-	if (!text_data)
-	{
+	if (!text_data) {
 		vm_file_close(f_read);
 		return;
 	}
@@ -68,26 +61,24 @@ void read_file_to_input(VMWSTR path)
 	VMINT ucs2_buf_size_bytes = nread * 2 + 2;
 	g_edit_buffer = vm_malloc(ucs2_buf_size_bytes);
 
-	if (!g_edit_buffer)
-	{
+	if (!g_edit_buffer) {
 		vm_free(text_data);
 		return;
 	}
 	memset(g_edit_buffer, 0, ucs2_buf_size_bytes);
 
 	VMINT max_chars = nread;
-	vm_chset_convert(VM_CHSET_UTF8, VM_CHSET_UCS2, text_data, (VMCHAR *)g_edit_buffer, ucs2_buf_size_bytes);
+	vm_chset_convert(VM_CHSET_UTF8, VM_CHSET_UCS2, text_data,
+					 (VMCHAR *)g_edit_buffer, ucs2_buf_size_bytes);
 
 	vm_input_text3(g_edit_buffer, 5000, 0, save_text);
 
 	vm_free(text_data);
 }
 
-void edit_file(const char *path)
-{
+void edit_file(const char *path) {
 
-	if (strlen(path) >= 99)
-	{
+	if (strlen(path) >= 99) {
 
 		return;
 	}
