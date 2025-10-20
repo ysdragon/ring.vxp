@@ -1,0 +1,37 @@
+name: Build
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up build environment
+      run: |
+        sudo apt-get update
+        sudo apt-get install build-essential gcc-arm-none-eabi
+    - name: Build project
+      run: make -j$(nproc)
+    - name: Upload ring.vxp artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ring.vxp
+        path: ring.vxp
+    - name: Upload ring.vxp to Release
+      if: github.event_name == 'release' && github.event.action == 'published'
+      uses: softprops/action-gh-release@v2
+      with:
+        files: ring.vxp
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
