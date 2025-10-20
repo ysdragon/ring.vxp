@@ -4,6 +4,9 @@
 
 void ring_vm_extension ( RingState *pRingState )
 {
+	#if RING_VM_MRE
+		ring_vm_mre_loadfunctions(pRingState);
+	#endif
 	/* List */
 	#if RING_VM_LISTFUNCS
 		ring_vm_list_loadfunctions(pRingState);
@@ -27,10 +30,5 @@ void ring_vm_extension ( RingState *pRingState )
 	/* VM Information */
 	#if RING_VM_INFO
 		ring_vm_info_loadfunctions(pRingState);
-	#endif
-
-	/* MRE */
-	#if RING_VM_MRE
-		ring_vm_mre_loadfunctions(pRingState);
 	#endif
 }

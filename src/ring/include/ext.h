@@ -8,8 +8,8 @@
 	#define RING_VM_FILE 1
 	#define RING_VM_OS 1
 	#define RING_VM_REFMETA 0
-	#define RING_VM_INFO 1
-	#if RING_NODLL
+	#define RING_VM_INFO 0
+	#if RING_LOWMEM
 		#define RING_VM_DLL 0
 	#else
 		#define RING_VM_DLL 1
