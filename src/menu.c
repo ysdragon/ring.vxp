@@ -297,7 +297,7 @@ void set_menu(Menu new_menu)
     case MENU_ABOUT:
     {
         arrput(menu_list, "Ring Embedded in MRE");
-        arrput(menu_list, "Version: 1.0");
+        arrput(menu_list, "Version: " RING_VXP_VERSION);
         arrput(menu_list, "RingVM: " RING_STATE_VERSION);
         arrput(menu_list, "Copyright (C) 2025");
         arrput(menu_list, "ysdragon");

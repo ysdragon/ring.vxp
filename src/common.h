@@ -24,6 +24,8 @@ typedef enum State
 	ST_RUNNING,
 } State;
 
+#define RING_VXP_VERSION "1.2"
+
 #define RING_DIR "e:\\ring\\"
 
 #define HINT_BAR_HEIGHT 18
