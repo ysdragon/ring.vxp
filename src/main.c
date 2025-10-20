@@ -138,7 +138,7 @@ void handle_sysevt(VMINT message, VMINT param)
         }
 
         cleanup_ring_state();
-
+        log_close();
         vm_res_deinit();
         break;
     }
