@@ -33,6 +33,8 @@ typedef enum State
 #define MAIN_COLOR MRE_RGB(45, 84, 203)
 #define SEPARATOR_COLOR MRE_RGB(128, 128, 128)
 
+#define MRE_RGB(r, g, b) (VMUINT16)((((r) >> 3) << 11) | (((g) >> 2) << 5) | ((b) >> 3))
+
 #define SCREEN_WIDTH vm_graphic_get_screen_width()
 #define SCREEN_HEIGHT vm_graphic_get_screen_height()
 

@@ -1,21 +1,6 @@
 #ifndef ring_mre_h
 #define ring_mre_h
 
-#include "ring.h"
-
-#include <string.h>
-
-#include "vmsys.h"
-#include "vmgraph.h"
-#include "vmstdlib.h"
-#include "vmchset.h"
-#include "vmio.h"
-
-#include "util.h"
-#include "common.h"
-
-#define MRE_RGB(r, g, b) (VMUINT16)((((r) >> 3) << 11) | (((g) >> 2) << 5) | ((b) >> 3))
-
 void ring_vm_mre_loadfunctions(RingState *pRingState);
 
 void ring_mre_draw_text(void *pPointer);
