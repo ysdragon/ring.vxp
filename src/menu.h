@@ -5,7 +5,8 @@ typedef enum Menu
 {
     MENU_MAIN,
     MENU_FILE_PICKER,
-    MENU_ABOUT
+    MENU_ABOUT,
+    MENU_FILE_ACTION
 } Menu;
 
 typedef struct
@@ -13,6 +14,7 @@ typedef struct
     Menu menu_type;
     int menu_choice;
     char dir_path[FILENAME_MAX];
+    char selected_file[FILENAME_MAX];
 } MenuState;
 
 void draw_menu();

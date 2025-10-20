@@ -3,7 +3,8 @@
 int menu_choice = 0;
 char currentDir[FILENAME_MAX] = RING_DIR;
 
-MenuState last_menu_state = {MENU_MAIN, 0, RING_DIR};
+MenuState last_menu_state = {MENU_MAIN, 0, RING_DIR, ""};
+char file_action_path[FILENAME_MAX] = {0};
 
 void draw_menu()
 {
@@ -31,6 +32,9 @@ void draw_menu()
         break;
     case MENU_ABOUT:
         strcpy(title_str, "About");
+        break;
+    case MENU_FILE_ACTION:
+        strcpy(title_str, file_action_path);
         break;
     default:
         strcpy(title_str, "Menu");
@@ -191,6 +195,12 @@ void set_menu(Menu new_menu)
         arrput(menu_list, "Exit");
         break;
     }
+    case MENU_FILE_ACTION:
+    {
+        arrput(menu_list, "Run");
+        arrput(menu_list, "Edit");
+        break;
+    }
 
     case MENU_FILE_PICKER:
     {
@@ -329,6 +339,10 @@ void menu_back()
             draw_menu();
         }
         break;
+    case MENU_FILE_ACTION:
+        set_menu(MENU_FILE_PICKER);
+        draw_menu();
+        break;
 
     case MENU_ABOUT:
         set_menu(MENU_MAIN);
@@ -396,14 +410,33 @@ void menu_confirm()
 
         if (strncmp(selected_item, "[DIR]", 5) != 0 && strcmp(selected_item, "Empty directory") != 0)
         {
+            strcpy(file_action_path, selected_item);
+            set_menu(MENU_FILE_ACTION);
+            draw_menu();
+        }
+        break;
+    case MENU_FILE_ACTION:
+    {
+        if (!strcmp(selected_item, "Run"))
+        {
             save_menu_state();
 
             strcpy(currentScript, currentDir);
-            strncat(currentScript, selected_item, FILENAME_MAX - strlen(currentScript) - 1);
+            strncat(currentScript, file_action_path, FILENAME_MAX - strlen(currentScript) - 1);
 
             set_state(ST_RUNNING);
         }
+        else if (!strcmp(selected_item, "Edit"))
+        {
+            save_menu_state();
+
+            strcpy(currentScript, currentDir);
+            strncat(currentScript, file_action_path, FILENAME_MAX - strlen(currentScript) - 1);
+
+            set_state(ST_EDITOR);
+        }
         break;
+    }
 
     case MENU_ABOUT:
         set_menu(MENU_MAIN);
@@ -495,6 +528,14 @@ void save_menu_state()
     last_menu_state.menu_type = menu;
     last_menu_state.menu_choice = menu_choice;
     strcpy(last_menu_state.dir_path, currentDir);
+    if (menu == MENU_FILE_ACTION)
+    {
+        strcpy(last_menu_state.selected_file, file_action_path);
+    }
+    else
+    {
+        last_menu_state.selected_file[0] = '\0';
+    }
 }
 
 void restore_menu_state()
@@ -505,6 +546,10 @@ void restore_menu_state()
 
         int saved_choice = last_menu_state.menu_choice;
         set_menu(last_menu_state.menu_type);
+        if (last_menu_state.menu_type == MENU_FILE_ACTION)
+        {
+            strcpy(file_action_path, last_menu_state.selected_file);
+        }
 
         if (saved_choice >= 0 && saved_choice < arrlen(menu_list))
         {

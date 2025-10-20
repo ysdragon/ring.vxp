@@ -16,12 +16,14 @@
 #include "util.h"
 #include "ring.h"
 #include "stb_ds.h"
+#include "editor.h"
 #include "menu.h"
 
 typedef enum State
 {
 	ST_MENU,
 	ST_RUNNING,
+	ST_EDITOR,
 } State;
 
 #define RING_VXP_VERSION "1.2"

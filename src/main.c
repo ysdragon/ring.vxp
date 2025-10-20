@@ -60,8 +60,8 @@ void set_state(State new_state)
             if (old_state == ST_RUNNING)
             {
                 cleanup_ring_state();
-                restore_menu_state();
             }
+            restore_menu_state();
             draw_menu();
         }
         else if (current_state == ST_RUNNING)
@@ -71,6 +71,10 @@ void set_state(State new_state)
             {
                 log_write("Script execution failed.");
             }
+        }
+        else if (current_state == ST_EDITOR)
+        {
+            edit_file(currentScript);
         }
     }
 }
@@ -150,7 +154,7 @@ void handle_keyevt(VMINT event, VMINT keycode)
     {
         handle_keyevt_menu(event, keycode);
     }
-    else if (current_state == ST_RUNNING)
+    else if (current_state == ST_RUNNING || current_state == ST_EDITOR)
     {
         if (event == VM_KEY_EVENT_DOWN)
         {
