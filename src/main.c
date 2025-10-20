@@ -14,7 +14,6 @@ VMINT SCREEN_WIDTH;
 VMINT SCREEN_HEIGHT;
 char **menu_list = NULL;
 Menu menu = MENU_MAIN;
-
 RingState *pRingState = NULL;
 
 /*
@@ -138,6 +137,8 @@ void handle_sysevt(VMINT message, VMINT param)
             menu_list = NULL;
         }
 
+        cleanup_ring_state();
+
         vm_res_deinit();
         break;
     }
@@ -250,8 +251,8 @@ static VMBOOL execute_script(const char *script_path)
             break;
         }
 
-        script_content = (char *)realloc(script_content_orig, script_size + 1);
-        if (!script_content)
+        char *temp_ptr = (char *)realloc(script_content_orig, script_size + 1);
+        if (!temp_ptr)
         {
             log_write("Error reallocating memory for null-termination.");
             free(script_content_orig);
@@ -260,6 +261,7 @@ static VMBOOL execute_script(const char *script_path)
             break;
         }
 
+        script_content = temp_ptr;
         script_content_orig = NULL;
         script_content[script_size] = '\0';
 
