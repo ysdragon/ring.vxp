@@ -3,6 +3,7 @@
 #include "vmsys.h"
 
 void log_init();
+void log_close();
 void log_write(const char *str);
 int log_printf(const char *format, ...);
 

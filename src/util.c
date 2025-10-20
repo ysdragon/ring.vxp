@@ -16,6 +16,16 @@ void log_init()
     log_write("--- Log Initialized ---");
 }
 
+void log_close(void)
+{
+    if (log_file >= 0)
+    {
+        log_write("--- Log Closed ---");
+        vm_file_close(log_file);
+        log_file = -1;
+    }
+}
+
 void log_write(const char *str)
 {
     if (log_file < 0)
