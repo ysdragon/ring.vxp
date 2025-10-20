@@ -36,7 +36,7 @@ int log_printf(const char *format, ...)
     va_list aptr;
 
     va_start(aptr, format);
-    int ret = vsprintf(buf, format, aptr);
+    int ret = vsnprintf(buf, sizeof(buf), format, aptr);
     va_end(aptr);
 
     if (ret >= 0)
